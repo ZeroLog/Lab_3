@@ -18,13 +18,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.node.modifierElementOf
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.lab_3.ui.theme.Lab_3Theme
 
 class MainActivity : ComponentActivity() {
@@ -41,10 +45,20 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
+var test = remember {
+    mutableStateOf(0)
+}
+    var qtext = remember {
+        mutableStateOf("jopa1")
+    }
+    var q1 = "jopa1"
+    var q2 = "jopa2"
+    var q3 = "jopa3"
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .fillMaxHeight()
     ) {
 
         Row(
@@ -53,7 +67,7 @@ fun GreetingPreview() {
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text(text = "Question")
+            Text(text = qtext.value, style= TextStyle(fontSize = 25.sp))
         }
         Row(
             horizontalArrangement = Arrangement.SpaceAround,
@@ -61,20 +75,27 @@ fun GreetingPreview() {
                 .fillMaxWidth()
             ) {
             Button(onClick = { /*TODO*/ }) {
-                Text(text = "True")
+                Text(text = "True", style= TextStyle(fontSize = 25.sp))
             }
             Button(onClick = { /*TODO*/ }) {
-                Text(text = "False")
+                Text(text = "False", style= TextStyle(fontSize = 25.sp))
             }
         }
         Row(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxWidth()
-                .offset(x = 100.dp)
+                .offset(x = 96.dp, y = 10.dp)
         ) {
-            Button(onClick = { /*TODO*/ }) {
-                Text(text = "Next")
+            Button(onClick = {
+                test.value = (test.value + 1) % 3
+                when(test.value) {
+                    0 -> qtext.value = q1
+                    1 -> qtext.value = q2
+                    2 -> qtext.value = q3
+                }
+            }) {
+                Text(text = "Next", style= TextStyle(fontSize = 25.sp))
             }
 
         }
