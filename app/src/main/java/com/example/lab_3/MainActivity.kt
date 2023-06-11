@@ -60,7 +60,6 @@ var test = remember {
             .fillMaxWidth()
             .fillMaxHeight()
     ) {
-
         Row(
             verticalAlignment= Alignment.Top,
             horizontalArrangement = Arrangement.Center,
@@ -97,7 +96,6 @@ var test = remember {
             }) {
                 Text(text = "Next", style= TextStyle(fontSize = 25.sp))
             }
-
         }
     }
 }
