@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -45,57 +46,70 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-var test = remember {
-    mutableStateOf(0)
-}
-    var qtext = remember {
-        mutableStateOf("jopa1")
+    val test = remember { mutableStateOf(0) }
+    val table = remember {
+        mutableStateOf(
+            listOf(
+                mutableListOf<Any?>("Москва столица России?", "2+3=10?", "2+2=4?"), // Вопросы
+                mutableListOf<Any?>(true, false, true), // правильный ответ
+                mutableListOf<Any?>(null, null, null), // ответ пользователя
+                mutableListOf<Any?>(null, null, null) // ответил ли пользователь на этот вопрос
+            )
+        )
     }
-    var q1 = "jopa1"
-    var q2 = "jopa2"
-    var q3 = "jopa3"
+    val allTrue = table.value[3].all { it == true }
+    val CellNull = table.value[3][test.value] as? Boolean ?: false
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
+        modifier = Modifier.fillMaxWidth().fillMaxHeight()
     ) {
         Row(
-            verticalAlignment= Alignment.Top,
+            verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = qtext.value, style= TextStyle(fontSize = 25.sp))
+            Text(text = table.value[0][test.value].toString(), style = TextStyle(fontSize = 25.sp))
         }
-        Row(
-            horizontalArrangement = Arrangement.SpaceAround,
-            modifier = Modifier
-                .fillMaxWidth()
+        if (!CellNull) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceAround,
+                modifier = Modifier.fillMaxWidth()
             ) {
-            Button(onClick = { /*TODO*/ }) {
-                Text(text = "True", style= TextStyle(fontSize = 25.sp))
-            }
-            Button(onClick = { /*TODO*/ }) {
-                Text(text = "False", style= TextStyle(fontSize = 25.sp))
+                Button(onClick = {
+                    val updatedList = table.value.toMutableList()
+                    updatedList[2][test.value] = true
+                    updatedList[3][test.value] = true
+                    table.value = updatedList
+                }) {
+                    Text(text = "True", style = TextStyle(fontSize = 25.sp))
+                }
+                Button(onClick = {
+                    val updatedList = table.value.toMutableList()
+                    updatedList[2][test.value] = false
+                    updatedList[3][test.value] = true
+                    table.value = updatedList
+                }) {
+                    Text(text = "False", style = TextStyle(fontSize = 25.sp))
+                }
             }
         }
         Row(
             horizontalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .offset(x = 96.dp, y = 10.dp)
+            modifier = Modifier.fillMaxWidth().offset(x = 96.dp, y = 10.dp)
         ) {
             Button(onClick = {
                 test.value = (test.value + 1) % 3
-                when(test.value) {
-                    0 -> qtext.value = q1
-                    1 -> qtext.value = q2
-                    2 -> qtext.value = q3
+                if (!allTrue) {
+
                 }
             }) {
-                Text(text = "Next", style= TextStyle(fontSize = 25.sp))
+                Text(text = "Next", style = TextStyle(fontSize = 25.sp))
+
             }
         }
     }
+}
+@Composable
+fun Endp() {
+
 }
