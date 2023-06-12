@@ -60,7 +60,8 @@ fun GreetingPreview() {
     }
     val allTrue = table.value[3].all { it == true }
     val CellNull = table.value[3][test.value] as? Boolean ?: false
-
+    var correctAnswers = rememberSaveable { mutableStateOf(0) } // Прав отв
+    if (!allTrue){
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -83,6 +84,12 @@ fun GreetingPreview() {
                     updatedList[2][test.value] = true
                     updatedList[3][test.value] = true
                     table.value = updatedList
+                    if (!allTrue) {
+                        if (table.value[2][test.value] == table.value[1][test.value]) {
+                            correctAnswers.value++
+                        }
+                    }
+
                 }) {
                     Text(text = "True", style = TextStyle(fontSize = 25.sp))
                 }
@@ -91,6 +98,11 @@ fun GreetingPreview() {
                     updatedList[2][test.value] = false
                     updatedList[3][test.value] = true
                     table.value = updatedList
+                    if (!allTrue) {
+                        if (table.value[2][test.value] == table.value[1][test.value]) {
+                            correctAnswers.value++
+                        }
+                    }
                 }) {
                     Text(text = "False", style = TextStyle(fontSize = 25.sp))
                 }
@@ -104,24 +116,36 @@ fun GreetingPreview() {
         ) {
             Button(onClick = {
                 test.value = (test.value + 1) % 3
-                if (!allTrue) {
-
-
-                }
             }) {
                 Text(text = "Next", style = TextStyle(fontSize = 25.sp))
-
             }
         }
     }
-}
-@Composable
-fun Endp() {
-    Row(
-        verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Text(text = "test")
+    }
+    if (allTrue) {
+        Row(
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(text = "Количество правильных ответов: ${correctAnswers.value}", style = TextStyle(fontSize = 20.sp))
+        }
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .offset(y = 200.dp)
+        ) {
+            Button(onClick = {
+                val updatedList = table.value.toMutableList()
+                updatedList[2] = mutableListOf(null, null, null)
+                updatedList[3] = mutableListOf(null, null, null)
+                table.value = updatedList
+                correctAnswers.value = 0
+            }) {
+                Text(text = "Repeat", style = TextStyle(fontSize = 25.sp))
+            }
+        }
     }
 }
