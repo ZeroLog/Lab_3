@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -46,8 +47,8 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    val test = remember { mutableStateOf(0) }
-    val table = remember {
+    val test = rememberSaveable { mutableStateOf(0) }
+    val table = rememberSaveable {
         mutableStateOf(
             listOf(
                 mutableListOf<Any?>("Москва столица России?", "2+3=10?", "2+2=4?"), // Вопросы
@@ -61,7 +62,9 @@ fun GreetingPreview() {
     val CellNull = table.value[3][test.value] as? Boolean ?: false
 
     Column(
-        modifier = Modifier.fillMaxWidth().fillMaxHeight()
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
     ) {
         Row(
             verticalAlignment = Alignment.Top,
@@ -95,11 +98,14 @@ fun GreetingPreview() {
         }
         Row(
             horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth().offset(x = 96.dp, y = 10.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .offset(x = 96.dp, y = 10.dp)
         ) {
             Button(onClick = {
                 test.value = (test.value + 1) % 3
                 if (!allTrue) {
+
 
                 }
             }) {
@@ -111,5 +117,11 @@ fun GreetingPreview() {
 }
 @Composable
 fun Endp() {
-
+    Row(
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(text = "test")
+    }
 }
